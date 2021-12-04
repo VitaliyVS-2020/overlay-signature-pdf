@@ -31,7 +31,7 @@ public class OverlaySignaturePDF implements Callable<Integer> {
         Gson options = new Gson();
         Options setting = options.fromJson(fis, Options.class);
 
-        File canvas = new File(setting.canvas);
+        File canvas = new File(setting.file);
         File outfile = new File(setting.output);
         outfile.createNewFile(); // if file already exists will do nothing
 
@@ -43,8 +43,8 @@ public class OverlaySignaturePDF implements Callable<Integer> {
                 float normalizedWidth;
                 float normalizedHeight;
 
-                Images keyFind = setting.images.stream()
-                        .filter(image -> overlay.key.equals(image.key))
+                Pictures keyFind = setting.pictures.stream()
+                        .filter(image -> overlay.picName.equals(image.picName))
                         .findAny()
                         .orElse(null);
 
@@ -55,30 +55,30 @@ public class OverlaySignaturePDF implements Callable<Integer> {
                 File imageFiles = new File(keyFind.name);
 
                 //we will add the image to the first page.
-                PDPage page = doc.getPage(overlay.Page - 1);
+                PDPage page = doc.getPage(overlay.pageNumber - 1);
 
                 // createFromFile is the easiest way with an image file
                 // if you already have the image in a BufferedImage,
                 PDImageXObject pdImage = PDImageXObject.createFromFileByContent(imageFiles, doc);
                 PDRectangle size = page.getBBox();
 
-                if (overlay.RelativeCoordinates) {
-                    normalizedLeftUpperX = overlay.LeftUpperX * size.getWidth() / 100;
-                    normalizedLeftUpperY = overlay.LeftUpperY * size.getHeight() / 100;
+                if (overlay.relativeCoordinates) {
+                    normalizedLeftUpperX = overlay.xCoordinate * size.getWidth() / 100;
+                    normalizedLeftUpperY = overlay.yCoordinate * size.getHeight() / 100;
                 } else {
-                    normalizedLeftUpperX = overlay.LeftUpperX;
-                    normalizedLeftUpperY = overlay.LeftUpperY;
+                    normalizedLeftUpperX = overlay.xCoordinate;
+                    normalizedLeftUpperY = overlay.yCoordinate;
                 }
 
-                if (overlay.RelativeSizes) {
-                    normalizedWidth = overlay.Width * size.getWidth() / 100;
-                    normalizedHeight = overlay.Height * size.getHeight() / 100;
+                if (overlay.relativeSizes) {
+                    normalizedWidth = overlay.width * size.getWidth() / 100;
+                    normalizedHeight = overlay.height * size.getHeight() / 100;
                 } else {
-                    normalizedWidth = overlay.Width;
-                    normalizedHeight = overlay.Height;
+                    normalizedWidth = overlay.width;
+                    normalizedHeight = overlay.height;
                 }
 
-                if (!overlay.ChangeProportions) {
+                if (!overlay.changeProportions) {
                     float kX = normalizedWidth / pdImage.getWidth();
                     float tempHeight = kX * pdImage.getHeight();
                     if (tempHeight >= normalizedHeight) {

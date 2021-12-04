@@ -1,25 +1,25 @@
 import java.util.List;
 
 public class Options {
-    public String canvas;
+    public String file;
     public String output;
-    public List<Images> images;
+    public List<Pictures> pictures;
     public List<Overlays> overlays;
 }
 
-class Images {
-    public String key;
+class Pictures {
+    public String picName;
     public String name;
 }
 
 class Overlays {
-    public String key;
-    public int Page;
-    public boolean RelativeCoordinates;
-    public int LeftUpperX;
-    public int LeftUpperY;
-    public boolean RelativeSizes;
-    public int Height;
-    public int Width;
-    public boolean ChangeProportions;
+    public String picName;
+    public int pageNumber;
+    public boolean relativeCoordinates;
+    public int xCoordinate;
+    public int yCoordinate;
+    public boolean relativeSizes;
+    public int height;
+    public int width;
+    public boolean changeProportions;
 }
