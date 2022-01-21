@@ -3,12 +3,14 @@ import java.io.*;
 import java.util.concurrent.Callable;
 
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.apache.pdfbox.Loader;
+
+//import org.apache.pdfbox.Loader; // for 3.0.0-RC1
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -34,8 +36,8 @@ public class OverlaySignaturePDF implements Callable<Integer> {
         File canvas = new File(setting.file);
         File outfile = new File(setting.output);
         outfile.createNewFile(); // if file already exists will do nothing
-
-        try (PDDocument doc = Loader.loadPDF(canvas)) {
+ //       try (PDDocument doc = Loader.loadPDF(canvas)) { // for 3.0.0-RC1
+        try (PDDocument doc = PDDocument.load(canvas)) {
             for (Overlays overlay : setting.overlays) {
                 // normalized coordinates
                 float normalizedLeftUpperX;
