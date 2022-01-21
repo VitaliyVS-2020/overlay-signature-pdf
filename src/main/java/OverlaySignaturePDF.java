@@ -67,7 +67,8 @@ public class OverlaySignaturePDF implements Callable<Integer> {
                 File imageFiles = new File(keyFind.name);
 
                 //we will add the image to the page.
-                PDPage page = doc.getPage(overlay.pageNumber - 1);
+                int pageNum = (overlay.pageNumber == 0) ? doc.getNumberOfPages() - 1 : overlay.pageNumber - 1;
+                PDPage page = doc.getPage(pageNum);
 
                 // createFromFile is the easiest way with an image file
                 // if you already have the image in a BufferedImage,
