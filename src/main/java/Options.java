@@ -5,6 +5,7 @@ public class Options {
     public String output;
     public List<Pictures> pictures;
     public List<Overlays> overlays;
+    public boolean addLastPage;
 }
 
 class Pictures {

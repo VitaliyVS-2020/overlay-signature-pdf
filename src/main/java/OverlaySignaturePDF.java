@@ -38,6 +38,16 @@ public class OverlaySignaturePDF implements Callable<Integer> {
         outfile.createNewFile(); // if file already exists will do nothing
  //       try (PDDocument doc = Loader.loadPDF(canvas)) { // for 3.0.0-RC1
         try (PDDocument doc = PDDocument.load(canvas)) {
+
+            if (setting.addLastPage) {
+                //size last page
+                PDPage lastPage = doc.getPage(doc.getNumberOfPages() - 1);
+                PDRectangle sizeLastPage = lastPage.getMediaBox();
+                //we will add new last page
+                PDPage newLastPage = new PDPage(sizeLastPage);
+                doc.addPage(newLastPage);
+            }
+
             for (Overlays overlay : setting.overlays) {
                 // normalized coordinates
                 float normalizedLeftUpperX;
@@ -56,7 +66,7 @@ public class OverlaySignaturePDF implements Callable<Integer> {
 
                 File imageFiles = new File(keyFind.name);
 
-                //we will add the image to the first page.
+                //we will add the image to the page.
                 PDPage page = doc.getPage(overlay.pageNumber - 1);
 
                 // createFromFile is the easiest way with an image file
